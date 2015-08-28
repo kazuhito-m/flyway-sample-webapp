@@ -2,3 +2,4 @@ target/
 *.iml
 *.ipr
 *.iws
+./web-and-db-sample/cli/sql/*
