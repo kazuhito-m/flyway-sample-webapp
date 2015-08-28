@@ -67,6 +67,9 @@
                     <url>${jdbcUrl}</url>
                     <user>${jdbcUser}</user>
                     <password>${jdbcPassword}</password>
+                    <locations>
+                        <location>com/github/kazuhito_m/sample/db/migration</location>
+                    </locations>
                     <dependencies>
                         <dependency>
                             <groupId>mysql</groupId>

@@ -14,4 +14,4 @@ cp ${script_path}/../src/main/resources/com/github/kazuhito_m/sample/db/migratio
 
 # flyway 実行
 cd ${script_path}
-./flyway -X migrate
+./flyway migrate
