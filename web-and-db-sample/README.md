@@ -24,18 +24,34 @@ TODO
 
 ### Mavenプラグインを使ってのマイグレーション
 
-TODO
+pom.xml に "flyway-maven-plugin"を設定することにより、mvnコマンドにてマイグレーションが出来ます。
+
+以下のコマンドを実行して下さい。
+
+```bash
+mvn compile flyway:migrate
+```
+
+※接続先DBをpom.xmlの深いところに書かねばならない…外から読み込めれば良いのだが。
 
 ### デプロイすることによる自動マイグレーション
 
-TODO
+TODO  
+
+
+## 前準備
+
+上記のマイグレーション操作は、自身ローカル環境にて実行することを前提とします。
+
++ ローカルマシンにMySQLがインストールされていること
++ ローカルマシンのMySQLのDB内に"sample"(user:sample,pass:sampleps)という名のDatabaseが作成されていること
++ Webコンテナにデプロイされること
+
+が条件です。
+
+以下の操作を予め行っておいて下さい。
 
 ### DBの用意
-
-サンプルは
-
-+ MySQLのサーバがインストールされていること
-+ MySQLのDB内に"sample"(user:sample,pass:sampleps)という名のDatabasが作成されていること
 
 MySQLをインストールしておいて下さい。(バージョンは、どれでも動くと思いますができるだけ新しいもので)
 
@@ -43,8 +59,8 @@ MySQLをインストールしておいて下さい。(バージョンは、ど�
 
 ```bash
 sudo apt-get install mysql-server # 対話型でrootユーザ用のパスワードが求められますが、任意かつ覚えておいて下さい。
-```
 
+```
 次に、localhostでアクセス出来るように空のDatabaseを作成してください。
 
 ```bash
