@@ -6,7 +6,7 @@
     <display-name>Flyway migration sample</display-name>
 
     <listener>
-        <listener-class>com.github.kazuhito_m.sample.db.migration.Migrator</listener-class>
+        <listener-class>com.github.kazuhito_m.sample.db.migration.MigrationListener</listener-class>
     </listener>
 
     <servlet>

@@ -12,9 +12,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 
-public class Migrator implements ServletContextListener {
+public class MigrationListener implements ServletContextListener {
 
-    private final static Logger log = LoggerFactory.getLogger(Migrator.class);
+    private final static Logger log = LoggerFactory.getLogger(MigrationListener.class);
     private final static Flyway flyway;
 
     static {
@@ -32,23 +32,29 @@ public class Migrator implements ServletContextListener {
         flyway.repair();
 
         return flyway;
+
     }
 
     public static void migrate() {
         try {
+
             Object version = (flyway.info().current() == null) ?
                     "first applied!!" : flyway.info().current().getVersion();
-            log.debug("starting migrate...:" + version);
+            log.info("starting migrate...:" + version);
+
             int ret = flyway.migrate();
-            log.debug("migration done.:" + ret);
-            info();
+
+            log.info("migration done.:" + ret);
+
+            dumpMigrationStatus();
+
         } catch (FlywayException e) {
             log.error("migration faild.", e);
         }
     }
 
 
-    private static void info() {
+    private static void dumpMigrationStatus() {
         MigrationInfo[] infos = flyway.info().all();
         for (MigrationInfo info : infos) {
             log.debug(String.format("%s\t%-20s\t%s", info.getVersion(), info.getState(), info.getDescription()));
