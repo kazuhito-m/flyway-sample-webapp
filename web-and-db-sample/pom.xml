@@ -65,6 +65,9 @@
                     <url>${jdbcUrl}</url>
                     <user>${jdbcUser}</user>
                     <password>${jdbcPassword}</password>
+                    <locations>
+                        <location>${flywaySqlLocation}</location>
+                    </locations>
                     <dependencies>
                         <dependency>
                             <groupId>mysql</groupId>

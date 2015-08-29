@@ -8,36 +8,37 @@ import java.util.Properties;
 
 public class Settings {
 
-	private String jdbcDriver;
+    private String jdbcDriver;
     private String jdbcUrl;
-	private String jdbcUser;
-	private String jdbcPassword;
+    private String jdbcUser;
+    private String jdbcPassword;
+    private String flywaySqlLocation;
 
-	public static Settings get() {
-		Settings obj = new Settings();
-		try {
-			Properties prop = new Properties();
-			String propFileName = obj.getClass().getSimpleName().toLowerCase()
-					+ ".properties";
-			prop.load(Settings.class.getResourceAsStream(propFileName));
-			setValueBeanByProperties(obj, prop);
-		} catch (Exception e) {
-			e.printStackTrace();
+    public static Settings get() {
+        Settings obj = new Settings();
+        try {
+            Properties prop = new Properties();
+            String propFileName = obj.getClass().getSimpleName().toLowerCase()
+                    + ".properties";
+            prop.load(Settings.class.getResourceAsStream(propFileName));
+            setValueBeanByProperties(obj, prop);
+        } catch (Exception e) {
+            e.printStackTrace();
             obj = null;
-		}
-		return obj;
-	}
+        }
+        return obj;
+    }
 
-	private static void setValueBeanByProperties(Object bean,
-			Properties prop) throws IntrospectionException,
-			IllegalAccessException, InvocationTargetException {
-		for (Object name : Collections.list(prop.propertyNames())) {
-			PropertyDescriptor desc = new PropertyDescriptor(name.toString(),
-					bean.getClass());
-			desc.getWriteMethod().invoke(bean,
-					new Object[] { prop.get(name) });
-		}
-	}
+    private static void setValueBeanByProperties(Object bean,
+                                                 Properties prop) throws IntrospectionException,
+            IllegalAccessException, InvocationTargetException {
+        for (Object name : Collections.list(prop.propertyNames())) {
+            PropertyDescriptor desc = new PropertyDescriptor(name.toString(),
+                    bean.getClass());
+            desc.getWriteMethod().invoke(bean,
+                    new Object[]{prop.get(name)});
+        }
+    }
 
     public String getJdbcDriver() {
         return jdbcDriver;
@@ -70,4 +71,13 @@ public class Settings {
     public void setJdbcPassword(String jdbcPassword) {
         this.jdbcPassword = jdbcPassword;
     }
+
+    public String getFlywaySqlLocation() {
+        return flywaySqlLocation;
+    }
+
+    public void setFlywaySqlLocation(String flywaySqlLocation) {
+        this.flywaySqlLocation = flywaySqlLocation;
+    }
+
 }
