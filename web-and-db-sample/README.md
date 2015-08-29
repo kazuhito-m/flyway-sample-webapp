@@ -42,7 +42,27 @@ mvn compile flyway:migrate
 
 ### デプロイすることによる自動マイグレーション
 
-TODO  
+Warファイルを作成、コンテナにデプロイした瞬間にマイグレートが行われる仕込みです。
+
+まずは、ビルドしてください。
+
+```bash
+mvn clean package
+```
+
+./target の下に、*.war なファイルが出来ると思いますので、手持ちのWebコンテナにデプロイして下さい。
+
+以下は、tomcat8でデプロイした時の例ですが、catalina.out に以下の出力とともに、マイグレーションが行われます。
+
+```
+...
+
+14:08:09.562 [http-nio-8080-exec-116] DEBUG c.g.k.sample.db.migration.Migrator - 0002	SUCCESS             	create base tables
+14:08:09.563 [http-nio-8080-exec-116] DEBUG c.g.k.sample.db.migration.Migrator - 0003	SUCCESS             	add initial datas
+8 29, 2015 2:08:09 午後 org.apache.catalina.startup.HostConfig deployWAR
+情報: Deployment of web application archive /var/lib/tomcat8/webapps/web-and-db-sample.war has finished in 6,098 ms
+```
+  
 
 
 ## 前準備
