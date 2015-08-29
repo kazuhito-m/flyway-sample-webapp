@@ -3,5 +3,14 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>Flyway migration sample</display-name>
+    <servlet>
+        <servlet-name>index</servlet-name>
+        <servlet-class>com.github.kazuhito_m.sample.servlet.Index</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
 </web-app>

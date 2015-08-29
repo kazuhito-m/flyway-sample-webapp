@@ -1,5 +1,7 @@
 package com.github.kazuhito_m.sample.db;
 
+import com.github.kazuhito_m.sample.config.Settings;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,28 +18,17 @@ public class DbAccesser {
     private ResultSet resultset;
 
     /**
-     * コンストラクタ
-     * @param driver ドライバー
-     * @param url URL
-     * @param user ユーザー名
-     * @param password パスワード
-     */
-    public DbAccesser(String driver, String url, String user, String password) {
-        this.driver = driver;
-        this.url = url;
-        this.user = user;
-        this.password = password;
-    }
-
-    /**
      * 引数なしのコンストラクタ
      * 既定値を使用する
      */
     public DbAccesser() {
-        driver = "org.postgresql.Driver";
-        url = "jdbc:postgresql://localhost:5432/jspdb";
-        user = "postgres";
-        password = "";
+
+        Settings settings = Settings.get();
+
+        driver = settings.getJdbcDriver();
+        url = settings.getJdbcUrl();
+        user = settings.getJdbcUser();
+        password = settings.getJdbcPassword();
     }
 
     /**
