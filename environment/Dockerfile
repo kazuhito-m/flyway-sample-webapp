@@ -1,36 +1,42 @@
-FROM centos:centos6
+FROM ubuntu:15.10
 
 MAINTAINER kazuhito_m
 
 # インストール
 
-RUN yum update -y
-RUN yum -y install java-1.8.0-openjdk
-RUN yum -y install openssh-server
-RUN yum -y install tomcat6 tomcat6-webapps tomcat6-admin-webapps
-RUN yum -y install mysql-server
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y openssh-server 
+RUN apt-get install -y openjdk-8-jdk maven git vim
+RUN apt-get install -y tomcat8 tomcat8-admin
+
+# そのままapt-getでインストールするとパスワードを聞かれる箇所で止まってしまうので、予め設定しておく。この例ではパスワードは「root」。
+RUN echo "mysql-server mysql-server/root_password password root" | debconf-set-selections && \
+    echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections && \
+    apt-get -y install mysql-server
+
+# my.cnfを編集
+# bind-address行をコメントアウトして、外部から接続出来るようにする
+RUN sed -i -e "s/^bind-address\s*=\s*\(.*\)/#bind-address = \1/" /etc/mysql/my.cnf
+
+# デフォルトの文字コードをUTF-8に設定
+RUN sed -i -e "s/\(\[mysqld\]\)/\1\ncharacter-set-server = utf8/g" /etc/mysql/my.cnf
+RUN sed -i -e "s/\(\[client\]\)/\1\ndefault-character-set = utf8/g" /etc/mysql/my.cnf
+RUN sed -i -e "s/\(\[mysqldump\]\)/\1\ndefault-character-set = utf8/g" /etc/mysql/my.cnf
+RUN sed -i -e "s/\(\[mysql\]\)/\1\ndefault-character-set = utf8/g" /etc/mysql/my.cnf
 
 # 設定書き換え
-
-# MySQL設定ファイル
-RUN mv /etc/my.cnf /etc/my.cnf.org
-ADD ./templates/my.cnf /etc/my.cnf
 
 # 設定ファイル自体置き換え(tomcat)
 
 # Manager管理ユーザ設定
-RUN mv /etc/tomcat6/tomcat-users.xml  /etc/tomcat6/tomcat-users.xml.org
-ADD ./templates/tomcat-users.xml /etc/tomcat6/tomcat-users.xml
-RUN chown root:tomcat /etc/tomcat6/tomcat-users.xml
-RUN chmod 664 /etc/tomcat6/tomcat-users.xml
-# メモリ増加設定
-RUN cp -avr /etc/tomcat6/tomcat6.conf /etc/tomcat6/tomcat6.conf.org
-RUN echo 'CATALINA_OPTS="-server -Xms2048m -Xmx4096m -XX:PermSize=2048m -XX:MaxPermSize=4096m -XX:NewSize=512m"' >> /etc/tomcat6/tomcat6.conf
-# tomcat についているサンプルのWebアプリを削除(つかわんやろ…)
-RUN rm -rf /var/lib/tomcat6/webapps/examples /var/lib/tomcat6/webapps/sample
+RUN mv /etc/tomcat8/tomcat-users.xml  /etc/tomcat8/tomcat-users.xml.org
+ADD ./templates/tomcat-users.xml /etc/tomcat8/tomcat-users.xml
+RUN chown root:tomcat8 /etc/tomcat8/tomcat-users.xml
+RUN chmod 664 /etc/tomcat8/tomcat-users.xml
 
 # root はsshでパスワードログインできるように。
-RUN sed -ri 's/^#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -ri 's/^PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 RUN echo 'root:root' | chpasswd
 
@@ -39,7 +45,10 @@ ADD ./templates/ssh/id_rsa.pub /root/.ssh/authorized_keys
 RUN chmod 600 /root/.ssh/authorized_keys
 
 # サービス自動起動登録(再起動とかしないから要らん…かも?)
-RUN chkconfig mysqld on
+# …はインストール直後にserviceがONになってるものばっかりだから、要らんと思う。
+# 必要ならば、以下を入れる
+# apt-get install -y sysv-rc-conf 
+# sysv-rc-conf mysql on
 
 # crontab用のファイルを追加。
 ADD ./templates/crontab_root /var/spool/cron/root
