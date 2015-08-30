@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+// import javax.servlet.annotation.WebServletContextListener;
 
 
+/* @WebServletContextListener FIXME なぜかこのアノテーションが使えない…これ使えばweb.xmlの一文いらんのに…。 */
 public class MigrationListener implements ServletContextListener {
 
     private final static Logger log = LoggerFactory.getLogger(MigrationListener.class);
