@@ -65,6 +65,7 @@
                     <url>${jdbcUrl}</url>
                     <user>${jdbcUser}</user>
                     <password>${jdbcPassword}</password>
+                    <outOfOrder>true</outOfOrder>
                     <locations>
                         <location>${flywaySqlLocation}</location>
                     </locations>
@@ -112,4 +113,3 @@
         </plugins>
     </build>
 </project>
-
