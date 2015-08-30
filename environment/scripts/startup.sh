@@ -12,6 +12,9 @@ rm -f /var/run/tomcat8.pid
 service tomcat8 restart
 
 # MySql再起動
+
+# DBが行方不明だっつーエラーを吐きやがるので、事前に教ええる
+mysql_install_db --datadir=/var/lib/mysql --user=mysql
 service mysql restart
 
 # 日に二度Tomcatを上げ直すため、cron起動
