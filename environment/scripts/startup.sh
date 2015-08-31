@@ -23,14 +23,6 @@ service mysql restart
 # Dockerfileサイドで「root:rootをパスワードに設定」ってやってるはずなのに…rootをnonpassで通しやがる。TODOや
 
 # mysqlに外から入れるよう設定(二回目以降も権限系だけはふり直す)
-# mysql --user=root --connect-expired-password -e "SET PASSWORD FOR root@localhost=PASSWORD('root');"
-# mysql --user=root --password=root -e 'CREATE DATABASE IF NOT EXISTS sample;'
-# mysql --user=root --password=root -e 'GRANT ALL PRIVILEGES ON *.* TO sample@"%.%.%.%" IDENTIFIED BY "sampleps";'
-# mysql --user=root --password=root -e 'GRANT ALL PRIVILEGES ON *.* TO sample@"localhost" IDENTIFIED BY "sampleps";'
-# mysql --user=root --password=root -e 'GRANT ALL PRIVILEGES ON *.* TO root@"%.%.%.%" IDENTIFIED BY "root";'
-# mysql --user=root --password=root -e 'GRANT ALL PRIVILEGES ON *.* TO root@"localhost" IDENTIFIED BY "root";'
-
-# よくわからんのだが…「DB一つにrootのpasswordを設定した瞬間から、root全体のパスワードがnonpassではなくなる」って…どういう挙動だろう？
 mysql --user=root -e 'CREATE DATABASE IF NOT EXISTS sample;'
 mysql --user=root -e 'GRANT ALL PRIVILEGES ON *.* TO sample@"%.%.%.%" IDENTIFIED BY "sampleps";'
 mysql --user=root -e 'GRANT ALL PRIVILEGES ON *.* TO sample@"localhost" IDENTIFIED BY "sampleps";'
