@@ -2,10 +2,7 @@ package com.github.kazuhito_m.sample.db;
 
 import com.github.kazuhito_m.sample.config.Settings;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DbAccesser {
 
@@ -35,9 +32,19 @@ public class DbAccesser {
      * データベースへの接続を行う
      */
     public synchronized void open() throws Exception {
-        Class.forName(driver);
-        connection = DriverManager.getConnection(url, user, password);
+        connection = this.getConnection();
         statement = connection.createStatement();
+    }
+
+    /**
+     * 別途実験のため、コネクション取得の部分のみ切り離す。
+     * @return 接続済みコネクション。
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(driver);
+        return DriverManager.getConnection(url, user, password);
     }
 
     /**
