@@ -5,3 +5,4 @@ target/
 ./web-and-db-sample/cli/sql/*
 .idea/
 .gradle/
+build/
